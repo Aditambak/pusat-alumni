@@ -1,9 +1,7 @@
 <?php
-// Memulai session dan menyertakan file konfigurasi
 session_start();
 require_once 'config.php';
 
-// --- Keamanan Halaman Admin ---
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.php");
     exit;
@@ -12,13 +10,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 $message = '';
 $message_type = '';
 
-// --- Logika untuk Memproses Aksi (Verifikasi / Tolak) ---
 if (isset($_GET['action']) && isset($_GET['id'])) {
     $action = $_GET['action'];
-    $alumni_id = intval($_GET['id']); // Konversi ke integer untuk keamanan
+    $alumni_id = intval($_GET['id']); 
 
     if ($action == 'verify') {
-        // Update status menjadi 'terverifikasi'
+
         $sql = "UPDATE alumni SET status_verifikasi = 'terverifikasi' WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $alumni_id);
@@ -31,7 +28,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
         }
         $stmt->close();
     } elseif ($action == 'delete') {
-        // Hapus data alumni
+
         $sql = "DELETE FROM alumni WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $alumni_id);
@@ -45,21 +42,19 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
         $stmt->close();
     }
     
-    // Redirect kembali ke halaman ini untuk menghindari resubmit form
+
     header("Location: admin_verifikasi.php");
     exit;
 }
 
-// Ambil pesan dari session jika ada
+
 if (isset($_SESSION['message'])) {
     $message = $_SESSION['message'];
     $message_type = $_SESSION['message_type'];
-    // Hapus pesan dari session agar tidak tampil lagi
     unset($_SESSION['message']);
     unset($_SESSION['message_type']);
 }
 
-// --- Logika untuk Mengambil Data Alumni yang Belum Diverifikasi ---
 $sql_select = "SELECT id, nim, nama_lengkap, email, angkatan FROM alumni WHERE status_verifikasi = 'belum_diverifikasi' ORDER BY created_at DESC";
 $result = $conn->query($sql_select);
 

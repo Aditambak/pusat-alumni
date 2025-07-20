@@ -1,11 +1,10 @@
 <?php
-// Memulai session
 session_start();
 
-// Include file koneksi database
+
 require_once 'config.php';
 
-// Cek jika pengguna sudah login, redirect ke dashboard yang sesuai
+
 if (isset($_SESSION['user_id'])) {
     if ($_SESSION['role'] == 'admin') {
         header("Location: admin_dashboard.php");
@@ -17,9 +16,9 @@ if (isset($_SESSION['user_id'])) {
 
 $error_message = '';
 
-// Proses login ketika form disubmit
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Pastikan koneksi ada sebelum digunakan
+
     if ($conn) {
         $username = trim($_POST['username']);
         $password = $_POST['password'];
@@ -27,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($username) || empty($password)) {
             $error_message = "NIM/Username dan Password tidak boleh kosong.";
         } else {
-            // Mencari user di tabel admin terlebih dahulu
+
             $sql = "SELECT id, username, password, 'admin' as role FROM admins WHERE username = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("s", $username);
@@ -38,22 +37,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $user = $result->fetch_assoc();
                 // Verifikasi password
                 if (password_verify($password, $user['password'])) {
-                    // Password benar, set session
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
                     $_SESSION['role'] = $user['role'];
                     
-                    // Redirect ke dashboard admin
                     header("Location: admin_dashboard.php");
                     exit;
                 } else {
                     $error_message = "Password salah.";
                 }
             } else {
-                // Jika tidak ditemukan di admin, cari di tabel alumni
                 $sql = "SELECT id, nim, password, 'alumni' as role FROM alumni WHERE nim = ?";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("s", $username); // nim digunakan sebagai username
+                $stmt->bind_param("s", $username); 
                 $stmt->execute();
                 $result = $stmt->get_result();
 
@@ -61,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $user = $result->fetch_assoc();
                      if (password_verify($password, $user['password'])) {
                         $_SESSION['user_id'] = $user['id'];
-                        $_SESSION['username'] = $user['nim']; // atau nama lengkap jika ada
+                        $_SESSION['username'] = $user['nim']; 
                         $_SESSION['role'] = $user['role'];
 
                         // Redirect ke dashboard alumni

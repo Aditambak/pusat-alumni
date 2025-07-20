@@ -2,21 +2,20 @@
 session_start();
 require_once 'config.php';
 
-// --- Keamanan Halaman Alumni ---
-// Cek apakah pengguna sudah login
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
-// Cek apakah pengguna adalah alumni
+
 if ($_SESSION['role'] !== 'alumni') {
-    // Jika bukan alumni, redirect ke halaman yang sesuai atau logout
+   
     header("Location: logout.php");
     exit;
 }
-// --- Akhir Keamanan Halaman Alumni ---
 
-// Ambil data alumni dari database untuk personalisasi
+
+
 $alumni_id = $_SESSION['user_id'];
 $stmt = $conn->prepare("SELECT nama_lengkap FROM alumni WHERE id = ?");
 $stmt->bind_param("i", $alumni_id);
@@ -26,7 +25,7 @@ $alumni = $result->fetch_assoc();
 $nama_alumni = $alumni['nama_lengkap'] ?? 'Alumni';
 $stmt->close();
 
-// Ambil beberapa lowongan pekerjaan terbaru yang aktif
+
 $lowongan_result = $conn->query("SELECT posisi, perusahaan, lokasi FROM lowongan_pekerjaan WHERE status = 'Aktif' ORDER BY tanggal_posting DESC LIMIT 4");
 
 $conn->close();

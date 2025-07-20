@@ -1,9 +1,8 @@
 <?php
-// Include file koneksi dan memulai session
 require_once 'config.php';
 session_start();
 
-// Jika sudah login, redirect ke dashboard
+
 if (isset($_SESSION['user_id'])) {
     header("Location: alumni_dashboard.php");
     exit;
@@ -14,7 +13,6 @@ $success_message = '';
 
 // Proses registrasi ketika form disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil dan bersihkan data dari form
     $nim = trim($_POST['nim']);
     $nama_lengkap = trim($_POST['nama_lengkap']);
     $email = trim($_POST['email']);
@@ -32,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($password !== $confirm_password) {
         $error_message = "Konfirmasi password tidak cocok.";
     } else {
-        // Cek apakah NIM atau Email sudah terdaftar
         $sql = "SELECT id FROM alumni WHERE nim = ? OR email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $nim, $email);
@@ -42,10 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->num_rows > 0) {
             $error_message = "NIM atau Email sudah terdaftar.";
         } else {
-            // Hash password sebelum disimpan
+
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-            // Insert data alumni baru ke database
             $sql_insert = "INSERT INTO alumni (nim, nama_lengkap, email, angkatan, password) VALUES (?, ?, ?, ?, ?)";
             $stmt_insert = $conn->prepare($sql_insert);
             $stmt_insert->bind_param("sssis", $nim, $nama_lengkap, $email, $angkatan, $hashed_password);

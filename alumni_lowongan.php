@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'api_helper.php'; // Sertakan helper yang sudah diperbarui
+require_once 'api_helper.php'; 
 
 // Keamanan Halaman Alumni
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'alumni') {
@@ -9,10 +9,10 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'alumni') {
 }
 
 // --- Pengaturan API Careerjet ---
-$affid = "MASUKKAN_AFFILIATE_ID_ANDA"; // <-- GANTI DENGAN ID ANDA
+$affid = "MASUKKAN_AFFILIATE_ID_ANDA"; 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$keywords = isset($_GET['search']) ? $_GET['search'] : "Software Engineer"; // Default keyword
-$location = isset($_GET['lokasi']) ? $_GET['lokasi'] : "Indonesia"; // Default location
+$keywords = isset($_GET['search']) ? $_GET['search'] : "Software Engineer"; 
+$location = isset($_GET['lokasi']) ? $_GET['lokasi'] : "Indonesia"; 
 
 $result = getCareerjetJobs($keywords, $location, $page, $affid);
 ?>
@@ -39,7 +39,6 @@ $result = getCareerjetJobs($keywords, $location, $page, $affid);
     </style>
 </head>
 <body>
-    <!-- Navigasi Atas (sama seperti sebelumnya) -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="alumni_dashboard.php">Tracer Study</a>
@@ -55,7 +54,6 @@ $result = getCareerjetJobs($keywords, $location, $page, $affid);
         </div>
     </nav>
 
-    <!-- Konten Utama -->
     <div class="container main-container">
         <section class="text-center mb-4">
             <h1 class="fw-bold">Pusat Karier & Lowongan Pekerjaan</h1>

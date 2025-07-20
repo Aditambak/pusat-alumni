@@ -14,7 +14,6 @@ $message_type = '';
 
 // Proses form saat disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil semua data dari form
     $nama_lengkap = trim($_POST['nama_lengkap']);
     $email = trim($_POST['email']);
     $no_telepon = trim($_POST['no_telepon']);

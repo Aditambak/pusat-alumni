@@ -26,7 +26,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
     exit;
 }
 
-// Ambil pesan dari session jika ada
 if (isset($_SESSION['message'])) {
     $message = $_SESSION['message'];
     $message_type = $_SESSION['message_type'];
@@ -71,7 +70,7 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Ambil daftar angkatan untuk dropdown filter
+
 $angkatan_result = $conn->query("SELECT DISTINCT angkatan FROM alumni JOIN feedback ON alumni.id = feedback.alumni_id ORDER BY angkatan DESC");
 ?>
 <!DOCTYPE html>

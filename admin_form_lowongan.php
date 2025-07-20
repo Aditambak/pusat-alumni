@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit;
 }
 
-// Inisialisasi variabel
 $lowongan = [
     'id' => '', 'posisi' => '', 'perusahaan' => '', 'deskripsi' => '', 
     'lokasi' => '', 'jenis_pekerjaan' => '', 'status' => 'Aktif'
@@ -16,7 +15,6 @@ $lowongan = [
 $page_title = "Tambah Lowongan Baru";
 $form_action = "admin_form_lowongan.php";
 
-// Cek apakah ini mode edit
 if (isset($_GET['id'])) {
     $lowongan_id = intval($_GET['id']);
     $sql = "SELECT * FROM lowongan_pekerjaan WHERE id = ?";
@@ -34,7 +32,6 @@ if (isset($_GET['id'])) {
 
 // Proses form saat disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari form
     $id = $_POST['id'] ?? null;
     $posisi = trim($_POST['posisi']);
     $perusahaan = trim($_POST['perusahaan']);
@@ -49,13 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['message_type'] = "danger";
     } else {
         if (empty($id)) {
-            // Mode Tambah (INSERT)
             $sql = "INSERT INTO lowongan_pekerjaan (posisi, perusahaan, deskripsi, lokasi, jenis_pekerjaan, status) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ssssss", $posisi, $perusahaan, $deskripsi, $lokasi, $jenis_pekerjaan, $status);
             $message_verb = "ditambahkan";
         } else {
-            // Mode Edit (UPDATE)
             $sql = "UPDATE lowongan_pekerjaan SET posisi=?, perusahaan=?, deskripsi=?, lokasi=?, jenis_pekerjaan=?, status=? WHERE id=?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ssssssi", $posisi, $perusahaan, $deskripsi, $lokasi, $jenis_pekerjaan, $status, $id);

@@ -1,39 +1,32 @@
 <?php
-// Memulai session dan menyertakan file konfigurasi
 session_start();
 require_once 'config.php';
 
-// --- Keamanan Halaman Admin ---
-// Cek apakah pengguna sudah login
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 // Cek apakah pengguna adalah admin
 if ($_SESSION['role'] !== 'admin') {
-    // Jika bukan admin, redirect ke halaman yang sesuai atau tampilkan error
-    header("Location: ../logout.php"); // Atau halaman error
+    header("Location: ../logout.php"); 
     exit;
 }
-// --- Akhir Keamanan Halaman Admin ---
 
-// Ambil nama admin dari session untuk ditampilkan
 $admin_username = $_SESSION['username'];
 
-// --- Logika untuk Mengambil Data Widget ---
-// 1. Total Alumni Terdata
+
 $total_alumni_result = $conn->query("SELECT COUNT(id) as total FROM alumni");
 $total_alumni = $total_alumni_result->fetch_assoc()['total'];
 
-// 2. Alumni Belum Diverifikasi
+
 $unverified_alumni_result = $conn->query("SELECT COUNT(id) as total FROM alumni WHERE status_verifikasi = 'belum_diverifikasi'");
 $unverified_alumni = $unverified_alumni_result->fetch_assoc()['total'];
 
-// 3. Feedback Baru Masuk
+
 $feedback_result = $conn->query("SELECT COUNT(id) as total FROM feedback");
 $total_feedback = $feedback_result->fetch_assoc()['total'];
 
-// 4. Total Lowongan Aktif
+
 $active_jobs_result = $conn->query("SELECT COUNT(id) as total FROM lowongan_pekerjaan WHERE status = 'Aktif'");
 $active_jobs = $active_jobs_result->fetch_assoc()['total'];
 
@@ -176,9 +169,11 @@ $conn->close();
                 </div>
             </div>
 
-            <div class="mt-5 d-flex gap-3">
-                 <button class="btn btn-primary btn-lg">Tambah Lowongan Baru</button>
-                 <button class="btn btn-secondary btn-lg">Cetak Laporan</button>
+           <div class="mt-5 d-flex gap-3">
+                 <a href="admin_form_lowongan.php" class="btn btn-primary btn-lg">Tambah Lowongan Baru</a>
+                 <a href="laporan_alumni.php" class="btn btn-secondary btn-lg" target="_blank">
+                    <i class="fas fa-print me-2"></i> Cetak Laporan
+                 </a>
             </div>
 
         </div>

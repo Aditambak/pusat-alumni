@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Daftar mata kuliah (bisa juga diambil dari tabel lain jika ada)
+// Daftar mata kuliah
 $daftar_matkul = [
     "Pengantar Ilmu Komputer",
     "Algoritma dan Struktur Data",
